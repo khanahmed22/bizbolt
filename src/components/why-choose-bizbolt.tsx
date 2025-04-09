@@ -37,7 +37,7 @@ export default function WhyChooseBizBolt() {
     },
   ]
 
-  // Animation variants
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

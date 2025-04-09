@@ -14,13 +14,13 @@ export default function NameGen() {
   const [userInput, setUserInput] = useState("")
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
   const [count, setCount] = useState<number>(() => {
-    // Check if we're in a browser environment
+   
     if (typeof window !== "undefined") {
       const savedCount = localStorage.getItem("nameGenCount")
-      // If there's a saved count, use it; otherwise start with 5
+      
       return savedCount !== null ? Number.parseInt(savedCount, 10) : 5
     }
-    // Default to 5 for server-side rendering
+    
     return 5
   })
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
@@ -30,7 +30,7 @@ export default function NameGen() {
   })
 
   useEffect(() => {
-    // Only run in browser environment
+    
     if (typeof window !== "undefined") {
       localStorage.setItem("nameGenCount", count.toString())
     }
@@ -52,12 +52,12 @@ export default function NameGen() {
 
     if (userInput.trim()) {
       await complete(userInput)
-      setCopiedIndex(null) // Reset copied state when generating new names
+      setCopiedIndex(null) 
     }
   }
 
   const handleCopy = (text: string, index: number) => {
-    // Extract just the name part if the line contains additional text
+   
     const nameMatch = text.match(/^(\d+\.\s*)?([^:]+?)(\s*-\s*.+)?$/)
     const nameToCopy = nameMatch ? nameMatch[2].trim() : text.trim()
 
@@ -66,13 +66,13 @@ export default function NameGen() {
       .then(() => {
         setCopiedIndex(index)
 
-        // Use Sonner toast
+       
         toast.success("Copied to clipboard", {
           description: `"${nameToCopy}" has been copied to your clipboard.`,
           duration: 2000,
         })
 
-        // Reset the copied state after 2 seconds
+        
         setTimeout(() => {
           setCopiedIndex(null)
         }, 2000)
@@ -85,7 +85,7 @@ export default function NameGen() {
       })
   }
 
-  // Animation variants for staggered animations
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -110,7 +110,7 @@ export default function NameGen() {
     },
   }
 
-  // Animate title text letter by letter
+
   const title = "Business Name Generator"
 
   return (

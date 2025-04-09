@@ -28,7 +28,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Close mobile menu when route changes
+  
   useEffect(() => {
     setIsOpen(false)
   }, [pathname])
@@ -88,7 +88,7 @@ export default function Navbar() {
             ))}
             <div className="pl-2 flex gap-x-2 items-center">
               
-              <ModeToggle/>
+              
               <SignedOut>
               <Button
                 onClick={()=>router.push('/sign-in')}

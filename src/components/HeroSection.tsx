@@ -15,7 +15,7 @@ export default function HeroSection({
 
   const router = useRouter()
   
-  // Generate paths for both positions
+ 
   const generatePaths = (position: number) => {
     return Array.from({ length: 36 }, (_, i) => ({
       id: `${position}-${i}`,

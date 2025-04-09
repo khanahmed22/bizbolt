@@ -13,7 +13,7 @@ export async function POST(req: Request): Promise<Response> {
     })
 
     if (!response.ok) {
-      const errorText = await response.text() // Capture API response error
+      const errorText = await response.text() 
       console.error("API Error:", errorText)
       return new Response(JSON.stringify({ error: `API Error: ${response.status} - ${errorText}` }), { status: 500 })
     }
@@ -26,7 +26,7 @@ export async function POST(req: Request): Promise<Response> {
   } catch (error: unknown) {
     console.error("Server Error:", error)
 
-    // Type guard to safely access error.message
+   
     const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
 
     return new Response(JSON.stringify({ error: errorMessage }), { status: 500 })

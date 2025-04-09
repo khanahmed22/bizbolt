@@ -17,15 +17,15 @@ export default function LogoGenerator() {
     
     if (typeof window !== "undefined") {
       const savedCount = localStorage.getItem("logoGenCount")
-      // If there's a saved count, use it; otherwise start with 5
+     
       return savedCount !== null ? Number.parseInt(savedCount, 10) : 5
     }
-    // Default to 5 for server-side rendering
+   
     return 5
   })
   const [showUpgradeModal, setShowUpgradeModal] = useState<boolean>(false)
 
-  // Save count to localStorage whenever it changes
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("logoGenCount", count.toString())
@@ -47,7 +47,7 @@ export default function LogoGenerator() {
     setImage(null)
 
     try {
-      // Decrement the count before making the API call
+     
       setCount((c) => c - 1)
 
       const response = await fetch("/api/generate-logo", {
@@ -82,7 +82,7 @@ export default function LogoGenerator() {
     document.body.removeChild(link)
   }
 
-  // Animation variants for staggered animations
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -107,7 +107,7 @@ export default function LogoGenerator() {
     },
   }
 
-  // Animate title text letter by letter
+
   const title = "LOGO Generator"
 
   return (

@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import {ClerkProvider} from '@clerk/nextjs'
+import { dark } from '@clerk/themes'
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +37,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClerkProvider>
+        <ClerkProvider appearance={{
+        baseTheme: dark,
+      }}>
           <ThemeProvider>
             <Navbar/>
             {children}

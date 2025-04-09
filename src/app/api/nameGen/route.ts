@@ -6,7 +6,7 @@ const google = createGoogleGenerativeAI({
 })
 
 export async function POST(req: Request) {
-  // The useCompletion hook sends the prompt as { prompt: string }
+ 
   const { prompt } = await req.json()
 
   if (!prompt || typeof prompt !== "string") {

@@ -52,7 +52,7 @@ export default function DomainChecker() {
     }
   }
 
-  // Animation variants for staggered animations
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -77,7 +77,7 @@ export default function DomainChecker() {
     },
   }
 
-  // Animate title text letter by letter
+  
   const title = "Domain Availability Checker"
 
   return (
@@ -241,16 +241,16 @@ export default function DomainChecker() {
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(result.DomainInfo).map(([key, value]: [string, string | undefined], index) => {
-                      // Skip rendering if value is null or empty
+                      
                       if (value === null || value === "") return null
 
-                      // Format dates
+                      
                       let displayValue = value
                       if ((key === "creationDate" || key === "expirationDate") && value !== undefined) {
                         displayValue = new Date(value).toLocaleDateString()
                       }
 
-                      // Format key for display
+                     
                       const formattedKey = key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())
 
                       return (
