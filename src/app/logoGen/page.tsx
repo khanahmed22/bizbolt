@@ -14,7 +14,7 @@ export default function LogoGenerator() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [count, setCount] = useState<number>(() => {
-    // Check if we're in a browser environment
+    
     if (typeof window !== "undefined") {
       const savedCount = localStorage.getItem("logoGenCount")
       // If there's a saved count, use it; otherwise start with 5
@@ -65,8 +65,8 @@ export default function LogoGenerator() {
       }
 
       setImage(data.image)
-    } catch (err: unknown | any) {
-      setError(err.message || "Something went wrong")
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred")
     } finally {
       setLoading(false)
     }

@@ -2,35 +2,27 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { CheckCircle, XCircle, Search, Loader2, Lock, Sparkles } from "lucide-react"
+import { CheckCircle, XCircle, Search, Loader2 } from "lucide-react"
 
 export default function DomainChecker() {
   const [domain, setDomain] = useState("")
-  const [result, setResult] = useState<any>(null)
+  interface DomainResult {
+    DomainInfo?: {
+      domainName?: string
+      domainAvailability?: string
+      creationDate?: string
+      expirationDate?: string
+      [key: string]: string | undefined
+    }
+  }
+
+  const [result, setResult] = useState<DomainResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [count, setCount] = useState<number>(() => {
-    // Check if we're in a browser environment
-    if (typeof window !== "undefined") {
-      const savedCount = localStorage.getItem("domainCheckCount")
-      // If there's a saved count, use it; otherwise start with 5
-      return savedCount !== null ? Number.parseInt(savedCount, 10) : 5
-    }
-    // Default to 5 for server-side rendering
-    return 5
-  })
-  const [showUpgradeModal, setShowUpgradeModal] = useState<boolean>(false)
-
-  // Save count to localStorage whenever it changes
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("domainCheckCount", count.toString())
-    }
-  }, [count])
 
   const checkDomain = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,19 +32,11 @@ export default function DomainChecker() {
       return
     }
 
-    if (count === 0) {
-      setShowUpgradeModal(true)
-      return
-    }
-
     setLoading(true)
     setError(null)
     setResult(null)
 
     try {
-      // Decrement the count before making the API call
-      setCount((c) => c - 1)
-
       const response = await fetch(`/api/check-domain?domain=${encodeURIComponent(domain)}`)
 
       if (!response.ok) {
@@ -61,7 +45,7 @@ export default function DomainChecker() {
 
       const data = await response.json()
       setResult(data)
-    } catch (err:unknown | any) {
+    } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred")
     } finally {
       setLoading(false)
@@ -178,11 +162,6 @@ export default function DomainChecker() {
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Checking...
                     </span>
-                  ) : count === 0 ? (
-                    <span className="flex items-center justify-center">
-                      <Lock className="mr-2 h-4 w-4" />
-                      Upgrade to Check More
-                    </span>
                   ) : (
                     <span className="flex items-center justify-center">
                       <Search className="mr-2 h-4 w-4" />
@@ -196,25 +175,6 @@ export default function DomainChecker() {
               </div>
             </motion.div>
           </motion.form>
-
-          {/* Usage counter */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mt-3 flex justify-center"
-          >
-            <div className="text-xs text-neutral-500 dark:text-neutral-400">
-              {count > 0 ? (
-                <span>
-                  You have <span className="font-semibold">{count}</span> free {count === 1 ? "check" : "checks"}{" "}
-                  remaining
-                </span>
-              ) : (
-                <span className="text-neutral-400 dark:text-neutral-500">No checks remaining</span>
-              )}
-            </div>
-          </motion.div>
 
           {error && (
             <motion.div
@@ -280,13 +240,13 @@ export default function DomainChecker() {
                     Domain Information
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Object.entries(result.DomainInfo).map(([key, value]: [string, any], index) => {
+                    {Object.entries(result.DomainInfo).map(([key, value]: [string, string | undefined], index) => {
                       // Skip rendering if value is null or empty
                       if (value === null || value === "") return null
 
                       // Format dates
                       let displayValue = value
-                      if (key === "creationDate" || key === "expirationDate") {
+                      if ((key === "creationDate" || key === "expirationDate") && value !== undefined) {
                         displayValue = new Date(value).toLocaleDateString()
                       }
 
@@ -319,88 +279,7 @@ export default function DomainChecker() {
             Powered by WhoisXMLAPI Domain Availability API
           </motion.div>
         </motion.div>
-
-        {/* Upgrade Banner */}
-        {count === 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-6 p-4 rounded-xl bg-gradient-to-r from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900 border border-neutral-300 dark:border-neutral-700 shadow-md"
-          >
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center">
-                <div className="mr-4 bg-white dark:bg-black p-2 rounded-full">
-                  <Sparkles className="h-6 w-6 text-neutral-800 dark:text-neutral-200" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-neutral-800 dark:text-neutral-200">Upgrade to Pro</h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Unlimited domain checks, WHOIS data, and more
-                  </p>
-                </div>
-              </div>
-              <Button
-                onClick={() => setShowUpgradeModal(true)}
-                className="w-full md:w-auto bg-neutral-800 hover:bg-neutral-900 text-white dark:bg-neutral-200 dark:hover:bg-neutral-300 dark:text-neutral-900"
-              >
-                Upgrade Now
-              </Button>
-            </div>
-          </motion.div>
-        )}
       </div>
-
-      {/* Upgrade Modal */}
-      {showUpgradeModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="bg-white dark:bg-neutral-900 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl border border-neutral-200 dark:border-neutral-800"
-          >
-            <div className="text-center mb-6">
-              <div className="mx-auto w-12 h-12 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mb-4">
-                <Sparkles className="h-6 w-6 text-neutral-800 dark:text-neutral-200" />
-              </div>
-              <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Upgrade to Pro</h2>
-              <p className="text-neutral-600 dark:text-neutral-400 mt-2">
-                Unlock unlimited domain checks and premium features
-              </p>
-            </div>
-
-            <div className="space-y-4 mb-6">
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                <p className="text-neutral-700 dark:text-neutral-300">Unlimited domain availability checks</p>
-              </div>
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                <p className="text-neutral-700 dark:text-neutral-300">Complete WHOIS data access</p>
-              </div>
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                <p className="text-neutral-700 dark:text-neutral-300">Domain monitoring and alerts</p>
-              </div>
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                <p className="text-neutral-700 dark:text-neutral-300">Bulk domain checking (up to 100 at once)</p>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <Button className="w-full bg-neutral-800 hover:bg-neutral-900 text-white dark:bg-neutral-200 dark:hover:bg-neutral-300 dark:text-neutral-900">
-                Upgrade for $7.99/month
-              </Button>
-              <Button variant="outline" className="w-full" onClick={() => setShowUpgradeModal(false)}>
-                Maybe Later
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      )}
     </div>
   )
 }
