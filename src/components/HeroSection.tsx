@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Sparkles, Globe, PenTool } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 

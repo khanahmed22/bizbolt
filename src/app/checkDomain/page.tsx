@@ -61,7 +61,7 @@ export default function DomainChecker() {
 
       const data = await response.json()
       setResult(data)
-    } catch (err) {
+    } catch (err:unknown | any) {
       setError(err instanceof Error ? err.message : "An error occurred")
     } finally {
       setLoading(false)

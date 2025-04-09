@@ -65,7 +65,7 @@ export default function LogoGenerator() {
       }
 
       setImage(data.image)
-    } catch (err: any) {
+    } catch (err: unknown | any) {
       setError(err.message || "Something went wrong")
     } finally {
       setLoading(false)

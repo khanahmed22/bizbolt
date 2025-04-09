@@ -343,10 +343,10 @@ export default function PricingPage() {
 
             <div className="bg-white dark:bg-neutral-900 p-6 rounded-xl border border-neutral-200 dark:border-neutral-800">
               <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">
-                Do you offer refunds if I'm not satisfied?
+                Do you offer refunds if I&apos;m not satisfied?
               </h3>
               <p className="text-neutral-600 dark:text-neutral-400">
-                We offer a 7-day money-back guarantee for all paid plans. If you're not satisfied with our service, you
+                We offer a 7-day money-back guarantee for all paid plans. If you&apos;re not satisfied with our service, you
                 can request a full refund within 7 days of your purchase.
               </p>
             </div>
@@ -356,7 +356,7 @@ export default function PricingPage() {
                 What happens when I reach my usage limit?
               </h3>
               <p className="text-neutral-600 dark:text-neutral-400">
-                When you reach your usage limit, you'll be prompted to upgrade to a higher tier to continue using the
+                When you reach your usage limit, you&apos;ll be prompted to upgrade to a higher tier to continue using the
                 service. Your existing data and settings will remain intact.
               </p>
             </div>

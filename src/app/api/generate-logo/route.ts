@@ -25,7 +25,7 @@ export async function POST(req: Request): Promise<Response> {
       headers: { "Content-Type": "application/json" },
     });
 
-  } catch (error: any) {
+  } catch (error: unknown | any) {
     console.error("Server Error:", error);
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
